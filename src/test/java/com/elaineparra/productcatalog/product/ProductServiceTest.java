@@ -95,6 +95,7 @@ class ProductServiceTest {
     void updateModifiesExistingProduct() {
         Product existing = productWithId(1L, "Old name", BigDecimal.valueOf(5.00), 3);
         when(repository.findById(1L)).thenReturn(Optional.of(existing));
+        when(repository.saveAndFlush(existing)).thenReturn(existing);
         ProductRequest request = new ProductRequest("New name", "updated description", BigDecimal.valueOf(15.00), 7);
 
         ProductResponse response = service.update(1L, request);
@@ -113,7 +114,7 @@ class ProductServiceTest {
         assertThatThrownBy(() -> service.update(99L, request))
                 .isInstanceOf(ProductNotFoundException.class);
 
-        verify(repository, never()).save(any());
+        verify(repository, never()).saveAndFlush(any());
     }
 
     @Test

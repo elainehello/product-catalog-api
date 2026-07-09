@@ -41,7 +41,8 @@ public class ProductService {
         product.setDescription(request.description());
         product.setPrice(request.price());
         product.setStock(request.stock());
-        return ProductResponse.from(product);   // dirty checking flushes on commit
+        Product updated = repository.saveAndFlush(product);
+        return ProductResponse.from(updated);
     }
 
     public void delete(Long id) {
